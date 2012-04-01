@@ -660,6 +660,16 @@ slots (i.e., `:init' and `:title')."
       (e2wm:aif (e2wm:$pst-class-extend pst-class)
           (e2wm:$pst-class-get-prop-gen slot-name it))))
 
+(defvar e2wm:@pst-class nil
+  "Dynamically bound to current perspective class.
+It is an instance of `e2wm:$pst-class'.
+Various `e2wm:$pst-class-SLOT' functions can be used to access
+its methods and attributes.")
+
+(defvar e2wm:@pst-super-class nil
+  "Dynamically bound to the super class of current perspective class.
+See also `e2wm:@pst-class'.")
+
 (defun e2wm:method-call (method-name class error-on-nil &rest args)
   "[internal] Call the method which belongs to the perspective class.
 If ERROR-ON-NIL is non-nil and the CLASS has no value at the slot, 
@@ -680,7 +690,9 @@ raise the error signal with ERROR-ON-NIL."
                                         #'e2wm:method-call
                                         method-name super-class
                                         error-on-nil args)))
-        (apply method args))))))
+        (let ((e2wm:@pst-class class)
+              (e2wm:@pst-super-class super-class))
+          (apply method args)))))))
 
 (defmacro e2wm:pst-method-call (method-name pst-instance &rest args)
   "[internal] Short cut macro. (pst-instance -> pst-class)"

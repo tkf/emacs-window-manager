@@ -38,3 +38,27 @@
          (result (e2wm:method-call
                   #'e2wm:$pst-class-init class nil)))
     (should (equal result expected-result))))
+
+
+(ert-deftest e2wm-pst-class-struct-access ()
+  (let* ((expected-result 'test-class-name)
+         (class
+          (make-e2wm:$pst-class
+           :init (lambda () (e2wm:$pst-class-name e2wm:@pst-class))
+           :name expected-result))
+         (result (e2wm:method-call
+                  #'e2wm:$pst-class-init class nil)))
+    (should (equal result expected-result))))
+
+
+(defstruct (e2wm:$test-pst-class (:include e2wm:$pst-class)) test-slot)
+
+(ert-deftest e2wm-pst-class-struct-inheritance ()
+  (let* ((expected-result 1)
+         (class
+          (make-e2wm:$test-pst-class
+           :init (lambda () (e2wm:$test-pst-class-test-slot e2wm:@pst-class))
+           :test-slot expected-result))
+         (result (e2wm:method-call
+                  #'e2wm:$pst-class-init class nil)))
+    (should (equal result expected-result))))
