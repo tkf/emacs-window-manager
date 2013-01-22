@@ -2798,8 +2798,11 @@ string object to insert the imenu buffer."
     (when win-name
       (e2wm:with-advice
        (e2wm:pst-buffer-set win-name (window-buffer window))))
-    ;; remove the buffer from the history
-    (when (get-buffer buried-buffer)
+    ;; remove the buffer from the history if it is the last buffer in
+    ;; the current frame
+    (when (loop for other in (get-buffer-window buried-buffer (selected-frame))
+                unless (eq other window) return t
+                finally return nil)
       (e2wm:message "#REMOVED BUFFER %s" buried-buffer)
       (e2wm:history-delete buried-buffer))
     ;; execute plugins (e.g. to update history)
