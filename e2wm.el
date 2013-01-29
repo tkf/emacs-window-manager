@@ -1523,10 +1523,7 @@ management. For window-layout.el.")
          (t
           (e2wm:message "#AD-SET-WINDOW-CONFIGURATION RESUME %s" pst-instance)
           (e2wm:pst-set-instance pst-instance)
-          (e2wm:pst-resume pst-instance)))
-        (e2wm:aand (e2wm:$pst-p pst-instance)
-                   (e2wm:$pst-focus pst-instance)
-                   (e2wm:pst-window-select it)))))
+          (e2wm:pst-resume pst-instance))))))
    (t
     ;;管理してない配置の場合はパースペクティブを無効にする
     (when (and (e2wm:managed-p) (null e2wm:override-window-ext-managed))
